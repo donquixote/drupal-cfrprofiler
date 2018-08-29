@@ -2,10 +2,8 @@
 
 namespace Drupal\cfrprofiler\Operation;
 
-use Drupal\cfrapi\Configurator\Configurator_IntegerInRange;
 use Drupal\cfrop\Operation\OperationInterface;
 use Drupal\cfrprofiler\ProfilingCase\ProfilingCaseInterface;
-use Drupal\cfrreflection\Configurator\Configurator_CallbackConfigurable;
 
 class Operation_ProfilingCase implements OperationInterface {
 
@@ -18,22 +16,6 @@ class Operation_ProfilingCase implements OperationInterface {
    * @var int
    */
   private $nRepetitions;
-
-  /**
-   * @return \Drupal\cfrapi\Configurator\ConfiguratorInterface
-   */
-  public static function plugin() {
-    return Configurator_CallbackConfigurable::createFromClassName(
-      self::class,
-      [
-        cfrplugin()->interfaceGetConfigurator(ProfilingCaseInterface::class),
-        new Configurator_IntegerInRange(1, NULL),
-      ],
-      [
-        t('Profiling case'),
-        t('Number of repetitions'),
-      ]);
-  }
 
   /**
    * @CfrPlugin("profilingCase", "Profiling case")
