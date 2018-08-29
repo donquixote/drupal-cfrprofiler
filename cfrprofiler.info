@@ -1,0 +1,4 @@
+name = CFR Profiler
+core = 7.x
+
+dependencies[] = cfrop

@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Implements hook_cfrplugin_info().
+ */
+function cfrprofiler_cfrplugin_info() {
+  return cfrplugindiscovery()->moduleFileScanPsr4(__FILE__);
+}
