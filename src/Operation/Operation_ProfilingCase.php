@@ -42,15 +42,15 @@ class Operation_ProfilingCase implements OperationInterface {
    */
   public function execute() {
     $dts = [];
-    $t0 = microtime(TRUE);
     for ($i = $this->nRepetitions; $i > 0; --$i) {
+      $this->profilingCase->reset();
+      $t0 = microtime(TRUE);
       $this->profilingCase->run();
-      $t0 += ($dts[] = microtime(TRUE) - $t0);
+      $t1 = microtime(TRUE);
+      $dts[] = ($t1 - $t0) * 1000;
     }
+
     sort($dts);
-    foreach ($dts as &$dt) {
-      $dt *= 1000;
-    }
     $fastest = $dts[0];
     $slowest = end($dts);
     drupal_set_message("Duration: $fastest - $slowest ms.");
