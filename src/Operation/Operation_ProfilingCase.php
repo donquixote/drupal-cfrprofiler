@@ -42,6 +42,18 @@ class Operation_ProfilingCase implements OperationInterface {
    */
   public function execute() {
 
+    foreach (['xhprof', 'xdebug'] as $extension_name) {
+      if (\extension_loaded($extension_name)) {
+        drupal_set_message(
+          t(
+            'The PHP extension "@extension" is enabled, and might contaminate your profiling results.',
+            [
+              '@extension' => $extension_name,
+            ]),
+          'warning');
+      }
+    }
+
     try {
       $this->doExecute();
     }
