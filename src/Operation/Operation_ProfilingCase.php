@@ -67,9 +67,29 @@ class Operation_ProfilingCase implements OperationInterface {
    * @throws \Exception
    */
   private function doExecute() {
+    $dts = $this->repeat($this->nRepetitions);
+    sort($dts);
+    $msFastest = $dts[0];
+    $nExtra = floor(200 / $msFastest);
+    $dtsExtra = $this->repeat($this->nRepetitions);
+    drupal_set_message("Repetitions: $this->nRepetitions + $nExtra.");
+    $dts = array_merge($dts, $dtsExtra);
+    sort($dts);
+    $msFastest = $dts[0];
+    $msSlowest = end($dts);
+    drupal_set_message("Duration: $msFastest - $msSlowest ms.");
+  }
+
+  /**
+   * @param int $n
+   *
+   * @return float[]
+   * @throws \Exception
+   */
+  private function repeat($n) {
 
     $dts = [];
-    for ($i = $this->nRepetitions; $i > 0; --$i) {
+    for ($i = $n; $i > 0; --$i) {
       $this->profilingCase->reset();
       $t0 = microtime(TRUE);
       $this->profilingCase->run();
@@ -77,9 +97,6 @@ class Operation_ProfilingCase implements OperationInterface {
       $dts[] = ($t1 - $t0) * 1000;
     }
 
-    sort($dts);
-    $fastest = $dts[0];
-    $slowest = end($dts);
-    drupal_set_message("Duration: $fastest - $slowest ms.");
+    return $dts;
   }
 }
