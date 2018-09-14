@@ -41,16 +41,35 @@ class Operation_ProfilingCase implements OperationInterface {
    * Runs the operation. Returns nothing.
    */
   public function execute() {
+
+    try {
+      $this->doExecute();
+    }
+    catch (\Exception $e) {
+      drupal_set_message("Exception in profiling case.");
+      return;
+    }
+  }
+
+  /**
+   * @throws \Exception
+   */
+  private function doExecute() {
+
     $dts = [];
     for ($i = $this->nRepetitions; $i > 0; --$i) {
       $this->profilingCase->reset();
       $t0 = microtime(TRUE);
       $this->profilingCase->run();
       $t1 = microtime(TRUE);
-      $dts[] = ($t1 - $t0) * 1000;
+      $dts[] = ($t1 - $t0);
     }
 
     sort($dts);
+    foreach ($dts as &$dt) {
+      $dt *= 1000;
+    }
+
     $fastest = $dts[0];
     $slowest = end($dts);
     drupal_set_message("Duration: $fastest - $slowest ms.");

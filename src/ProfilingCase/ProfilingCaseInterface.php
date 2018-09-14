@@ -13,6 +13,8 @@ interface ProfilingCaseInterface {
 
   /**
    * No return value.
+   *
+   * @throws \Exception
    */
   public function run();
 
